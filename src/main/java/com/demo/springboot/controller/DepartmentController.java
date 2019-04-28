@@ -24,6 +24,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 
 import com.demo.springboot.domain.Department;
+import com.demo.springboot.exception.ResourceNotFoundException;
 import com.demo.springboot.repository.DepartmentRepository;
 
 @RestController
@@ -76,7 +77,7 @@ public class DepartmentController {
 	}
 	
 	private void validate(Long id){
- 	  departmentRepository.findById(id).orElseThrow(() -> new RuntimeException());
+ 	  departmentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException());
 	}
 
 }

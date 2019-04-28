@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name="DEP", schema="HR")
@@ -18,6 +19,7 @@ public class Department {
     @Column(name="DEPARTMENT_ID")
 	private Long id;
     
+    @NotEmpty
     @Column(name="DEPARTMENT_NAME")
 	private String name;
     
@@ -40,8 +42,6 @@ public class Department {
 		this.name = name;
 	}
 
-	
-	
 	
 	
 }
