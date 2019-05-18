@@ -1,4 +1,4 @@
-package com.demo.springboot.controller;
+package com.demo.springboot.v1.controller;
 
 import java.net.URI;
 import java.util.List;
