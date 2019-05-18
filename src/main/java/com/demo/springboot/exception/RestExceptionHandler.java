@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.demo.springboot.dto.ErrorDetail;
@@ -31,10 +33,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 		return new ResponseEntity<>(errorDetail, null, HttpStatus.NOT_FOUND);
 	}
 
-	
-	@ExceptionHandler
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ResponseEntity<?> handleValidateError(MethodArgumentNotValidException manve){
+	@Override
+	public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException manve, HttpHeaders headers, HttpStatus status, WebRequest request){
 		ErrorDetail errorDetail= createErrorDetail(HttpStatus.BAD_REQUEST, manve, "Validation failed");
 		List<FieldError> fieldErrors =  manve.getBindingResult().getFieldErrors();
 		for(FieldError fieldError: fieldErrors){
@@ -46,8 +46,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
             ValidationError validationError = new ValidationError(fieldError.getCode(), messageSource.getMessage(fieldError, null));           
             validationErrorList.add(validationError);
 		}
-		return new ResponseEntity<>(errorDetail, null, HttpStatus.BAD_REQUEST);
-		
+		return handleExceptionInternal(manve, errorDetail, headers, status, request);
 	}
 	
 
