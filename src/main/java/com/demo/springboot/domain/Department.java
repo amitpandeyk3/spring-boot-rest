@@ -10,14 +10,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
 import io.swagger.annotations.ApiModelProperty;
 
 @Entity
 @Table(name="DEP")
-@JsonInclude(Include.NON_NULL)
 public class Department  {
 
     @Id

@@ -5,10 +5,14 @@ package com.demo.springboot.v1.controller;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -31,6 +35,8 @@ import com.demo.springboot.repository.DepartmentRepository;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;;
 
 @RestController("DepartmentControllerV1")
 @RequestMapping("/v1")
@@ -47,17 +53,28 @@ public class DepartmentController {
             @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
     })
-	public ResponseEntity<List<Department>> findAllDepartment(){
-		List<Department> departments  = departmentRepository.findAll();
-		return new ResponseEntity<List<Department>>(departments, HttpStatus.OK);
+	public ResponseEntity<Resources<Resource<Department>>> findAllDepartment(){
+		List<Resource<Department>> departments = StreamSupport.stream(departmentRepository.findAll().spliterator(), false)
+				.map(department -> new Resource<>(department,
+					linkTo(methodOn(DepartmentController.class).findDepartment(department.getId())).withSelfRel(),
+					linkTo(methodOn(DepartmentController.class).findAllDepartment()).withRel("employees")))
+				.collect(Collectors.toList());
+
+			return ResponseEntity.ok(
+				new Resources<>(departments,
+					linkTo(methodOn(DepartmentController.class).findAllDepartment()).withSelfRel()));
 	}	
 
 	
 	@GetMapping("/departments/{id}")
-	public ResponseEntity<?> findDepartment(@PathVariable Long id){
+	public ResponseEntity<Resource<Department>> findDepartment(@PathVariable Long id){
 		this.validate(id);
-		Optional<Department> department = departmentRepository.findById(id);
-		return new ResponseEntity<Department>(department.get(), HttpStatus.OK);		
+		Optional<Department> result = departmentRepository.findById(id);
+		Department department = result.get();
+		Resource<Department> resource = new Resource<Department>(department, linkTo(methodOn(DepartmentController.class).findDepartment(department.getId())).withSelfRel(),
+				linkTo(methodOn(DepartmentController.class).findAllDepartment()).withRel("departments")   
+				);
+		return new ResponseEntity<Resource<Department>>(resource, HttpStatus.OK);		
 	}
 	
 	@ApiOperation(value="Create a new department")
