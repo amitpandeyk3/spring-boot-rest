@@ -1,2 +1,8 @@
 # spring-boot-rest
-data-jpa
+
+Running as packaged application
+java -jar target/spring-boot-0.0.1-SNAPSHOT.jar
+
+Swagger UI  
+http://localhost:8080/payroll/swagger-ui.html#/
+
