@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import com.demo.springboot.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -31,24 +32,24 @@ public class EmployeeController {
 	
 
 	@Autowired
-	private EmployeeRepository employeeRepository;
+	private EmployeeService employeeService;
 	
 	@GetMapping("/employees/{id}")
 	public ResponseEntity<Employee> findEmployee(@PathVariable Long id){
 		this.validate(id);
-		Optional<Employee> employee = employeeRepository.findById(id);
+		Optional<Employee> employee = employeeService.findById(id);
 		return new ResponseEntity<Employee>(employee.get(), HttpStatus.OK);
 	}
 	
 	@GetMapping("/employees")
 	public ResponseEntity<List<Employee>> findAllEmployee(){
-		List<Employee> employees  = employeeRepository.findAll();
+		List<Employee> employees  = employeeService.findAll();
 		return new ResponseEntity<List<Employee>>(employees, HttpStatus.OK);
 	}
 	
 	@PostMapping("/employees")
 	public ResponseEntity<Void> createEmployee(@Valid @RequestBody Employee employee){
-		 employee = employeeRepository.save(employee);
+		 employee = employeeService.save(employee);
 		 HttpHeaders responseHeaders = new HttpHeaders();
 		 URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(employee.getId()).toUri();
 		 responseHeaders.setLocation(uri);
@@ -58,26 +59,26 @@ public class EmployeeController {
 	@PutMapping("/employees/{id}")
 	public ResponseEntity<Void> updateEmployee(@Valid @RequestBody Employee employee){
 		validate(employee.getId());
-		employeeRepository.save(employee);
+		employeeService.save(employee);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
 	@PatchMapping("/employees/{id}")
 	public ResponseEntity<Void> updatePartialEmployee(@RequestBody Employee employee){
 		validate(employee.getId());
-		employeeRepository.save(employee);
+		employeeService.save(employee);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/employees/{id}")
 	public ResponseEntity<Void> deleteEmployee(@PathVariable Long id){
 		validate(id);
-		employeeRepository.deleteById(id);
+		employeeService.deleteById(id);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
 	private void validate(Long id){
- 	  employeeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException());
+		employeeService.findById(id).orElseThrow(() -> new ResourceNotFoundException());
 	}
 
 

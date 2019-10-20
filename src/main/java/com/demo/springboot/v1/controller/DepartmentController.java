@@ -10,6 +10,7 @@ import java.util.stream.StreamSupport;
 
 import javax.validation.Valid;
 
+import com.demo.springboot.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
@@ -43,7 +44,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;;
 public class DepartmentController {
 	
 	@Autowired
-	private DepartmentRepository departmentRepository;
+	private DepartmentService departmentService;
 	
 	
 	@GetMapping("/departments")
@@ -54,7 +55,7 @@ public class DepartmentController {
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
     })
 	public ResponseEntity<Resources<Resource<Department>>> findAllDepartment(){
-		List<Resource<Department>> departments = StreamSupport.stream(departmentRepository.findAll().spliterator(), false)
+		List<Resource<Department>> departments = StreamSupport.stream(departmentService.findAll().spliterator(), false)
 				.map(department -> new Resource<>(department,
 					linkTo(methodOn(DepartmentController.class).findDepartment(department.getId())).withSelfRel(),
 					linkTo(methodOn(DepartmentController.class).findAllDepartment()).withRel("employees")))
@@ -69,7 +70,7 @@ public class DepartmentController {
 	@GetMapping("/departments/{id}")
 	public ResponseEntity<Resource<Department>> findDepartment(@PathVariable Long id){
 		this.validate(id);
-		Optional<Department> result = departmentRepository.findById(id);
+		Optional<Department> result = departmentService.findById(id);
 		Department department = result.get();
 		Resource<Department> resource = new Resource<Department>(department, linkTo(methodOn(DepartmentController.class).findDepartment(department.getId())).withSelfRel(),
 				linkTo(methodOn(DepartmentController.class).findAllDepartment()).withRel("departments")   
@@ -81,7 +82,7 @@ public class DepartmentController {
 	@ApiResponse(code= 201, message="successfully created department")
 	@PostMapping(value="/departments", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> createDepartment(@Valid @RequestBody Department department){
-		 department = departmentRepository.save(department);
+		 department = departmentService.save(department);
 		 HttpHeaders responseHeaders = new HttpHeaders();
 		 URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(department.getId()).toUri();
 		 responseHeaders.setLocation(uri);
@@ -91,26 +92,26 @@ public class DepartmentController {
 	@PutMapping("/departments/{id}")
 	public ResponseEntity<Void> updateDepartment(@Valid @RequestBody Department department){
 		validate(department.getId());
-		departmentRepository.save(department);
+		departmentService.save(department);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
 	@PatchMapping("/departments/{id}")
 	public ResponseEntity<Void> patchDepartment(@RequestBody Department department){
 		validate(department.getId());
-		departmentRepository.save(department);
+		departmentService.save(department);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/departments/{id}")
 	public ResponseEntity<Void> deleteDepartment(@PathVariable Long id){
 		validate(id);
-		departmentRepository.deleteById(id);
+		departmentService.deleteById(id);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
 	private void validate(Long id){
- 	  departmentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException());
+		departmentService.findById(id).orElseThrow(() -> new ResourceNotFoundException());
 	}
 
 }

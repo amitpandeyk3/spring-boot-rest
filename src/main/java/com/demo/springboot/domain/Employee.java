@@ -1,15 +1,13 @@
 package com.demo.springboot.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name="EMP")
@@ -28,6 +26,16 @@ public class Employee  {
 	@JoinColumn(name="DEPARTMENT_ID")
 	private Department department;
 
+	@UpdateTimestamp
+	private LocalDateTime lastUpdatedDate;
+
+	@Column(name = "CreatedDate", updatable=false)
+	@CreationTimestamp
+	private LocalDateTime createdDate;
+
+	@Version
+	private Integer version;
+
 	public Long getId() {
 		return id;
 	}
@@ -44,7 +52,36 @@ public class Employee  {
 		this.name = name;
 	}
 
-	
-	
-	
+	public Department getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(Department department) {
+		this.department = department;
+	}
+
+
+	public LocalDateTime getLastUpdatedDate() {
+		return lastUpdatedDate;
+	}
+
+	public void setLastUpdatedDate(LocalDateTime lastUpdatedDate) {
+		this.lastUpdatedDate = lastUpdatedDate;
+	}
+
+	public LocalDateTime getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(LocalDateTime createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public Integer getVersion() {
+		return version;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
+	}
 }
