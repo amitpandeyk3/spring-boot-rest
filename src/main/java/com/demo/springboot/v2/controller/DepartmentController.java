@@ -1,7 +1,12 @@
 package com.demo.springboot.v2.controller;
 
 
-
+import com.demo.springboot.domain.Department;
+import com.demo.springboot.dto.DepartmentResource;
+import com.demo.springboot.dto.Meta;
+import com.demo.springboot.repository.DepartmentRepository;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -10,14 +15,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.demo.springboot.domain.Department;
-import com.demo.springboot.dto.DepartmentResource;
-import com.demo.springboot.dto.Meta;
-import com.demo.springboot.repository.DepartmentRepository;
-
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 
 @RestController("DepartmentControllerV2")
 @RequestMapping("/v2")

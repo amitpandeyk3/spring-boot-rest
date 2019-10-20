@@ -1,8 +1,6 @@
 package com.demo.springboot.service;
 
 import com.demo.springboot.domain.Department;
-import com.demo.springboot.domain.Employee;
-import com.demo.springboot.exception.ResourceNotFoundException;
 import com.demo.springboot.repository.DepartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

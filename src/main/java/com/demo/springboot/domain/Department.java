@@ -1,15 +1,14 @@
 package com.demo.springboot.domain;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name="DEP")

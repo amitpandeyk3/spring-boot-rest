@@ -1,10 +1,10 @@
 package com.demo.springboot.dto;
 
-import java.util.List;
-
 import com.demo.springboot.domain.Department;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+import java.util.List;
 
 @JsonInclude(Include.NON_NULL)
 public class DepartmentResource extends Resource {
