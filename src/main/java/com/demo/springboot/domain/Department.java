@@ -29,9 +29,10 @@ public class Department  {
     private List<Employee> employees;
 
     @UpdateTimestamp
+	@Column(name="LAST_UPDATED_DATE")
     private LocalDateTime lastUpdatedDate;
 
-	@Column(name = "CreatedDate", updatable=false)
+	@Column(name="CREATED_DATE", updatable=false)
     @CreationTimestamp
     private LocalDateTime createdDate;
 

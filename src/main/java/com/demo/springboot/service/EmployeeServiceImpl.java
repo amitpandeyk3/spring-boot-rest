@@ -7,8 +7,8 @@ import com.demo.springboot.repository.DepartmentRepository;
 import com.demo.springboot.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,11 +30,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<Employee> findById(Long id) {
         return employeeRepository.findById(id);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Employee> findAll() {
         return employeeRepository.findAll();
     }
