@@ -49,21 +49,21 @@ public class EmployeeController {
 	public ResponseEntity<Void> updateEmployee(@Valid @RequestBody Employee employee){
 		validate(employee.getId());
 		employeeService.save(employee);
-		return new ResponseEntity<Void>(HttpStatus.OK);
+		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	}
 	
 	@PatchMapping("/employees/{id}")
 	public ResponseEntity<Void> updatePartialEmployee(@RequestBody Employee employee){
 		validate(employee.getId());
 		employeeService.save(employee);
-		return new ResponseEntity<Void>(HttpStatus.OK);
+		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	}
 	
 	@DeleteMapping("/employees/{id}")
 	public ResponseEntity<Void> deleteEmployee(@PathVariable Long id){
 		validate(id);
 		employeeService.deleteById(id);
-		return new ResponseEntity<Void>(HttpStatus.OK);
+		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	}
 	
 	private void validate(Long id){

@@ -48,7 +48,8 @@ public class DepartmentController {
 		List<Resource<Department>> departments = StreamSupport.stream(departmentService.findAll().spliterator(), false)
 				.map(department -> new Resource<>(department,
 					linkTo(methodOn(DepartmentController.class).findDepartment(department.getId())).withSelfRel(),
-					linkTo(methodOn(DepartmentController.class).findAllDepartment()).withRel("employees")))
+					linkTo(methodOn(DepartmentController.class).findAllDepartment()).withRel("departments"),
+					linkTo(methodOn(EmployeeController.class).findAllEmployee()).withRel("employees")))
 				.collect(Collectors.toList());
 
 			return ResponseEntity.ok(
@@ -83,21 +84,21 @@ public class DepartmentController {
 	public ResponseEntity<Void> updateDepartment(@Valid @RequestBody Department department){
 		validate(department.getId());
 		departmentService.save(department);
-		return new ResponseEntity<Void>(HttpStatus.OK);
+		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	}
 	
 	@PatchMapping("/departments/{id}")
 	public ResponseEntity<Void> patchDepartment(@RequestBody Department department){
 		validate(department.getId());
 		departmentService.save(department);
-		return new ResponseEntity<Void>(HttpStatus.OK);
+		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	}
 	
 	@DeleteMapping("/departments/{id}")
 	public ResponseEntity<Void> deleteDepartment(@PathVariable Long id){
 		validate(id);
 		departmentService.deleteById(id);
-		return new ResponseEntity<Void>(HttpStatus.OK);
+		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	}
 	
 	private void validate(Long id){

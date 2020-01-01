@@ -24,7 +24,6 @@ import static org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE;
 
 @SpringBootApplication
 @EnableSwagger2
-@EnableTransactionManagement
 @Import({DataJpaConfig.class, ServicesConfig.class})
 @ComponentScan(basePackages = "com.demo.springboot", excludeFilters = {	@ComponentScan.Filter(type = ASSIGNABLE_TYPE,
 						value = {

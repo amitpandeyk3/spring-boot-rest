@@ -32,10 +32,11 @@ public class DataJpaConfig {
         properties.put("hibernate.format_sql", true);
         properties.put("hibernate.use_sql_comments", true);
         properties.put("hibernate.show_sql", true);
-        properties.put("hibernate.generate_statistics", true);
+        properties.put("hibernate.generate_statistics", false);
         properties.put("hibernate.max_fetch_depth", 3);
         properties.put("hibernate.jdbc.batch_size", 10);
         properties.put("hibernate.jdbc.fetch_size", 50);
+        properties.put("hibernate.hbm2ddl.auto", "create-drop");
         return properties;
     }
 

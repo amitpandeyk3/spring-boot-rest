@@ -16,7 +16,8 @@ import java.util.List;
 public class Department  {
 
     @Id
-    @GeneratedValue
+	@SequenceGenerator(name="Dep_Gen", sequenceName = "Dep_seq")
+    @GeneratedValue(generator = "Dep_Gen")
     @Column(name="DEPARTMENT_ID")
     @ApiModelProperty(notes = "The database generated department ID")
 	private Long id;

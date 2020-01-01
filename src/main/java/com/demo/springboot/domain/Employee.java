@@ -14,7 +14,8 @@ import java.time.LocalDateTime;
 public class Employee  {
 
 	@Id
-	@GeneratedValue
+	@SequenceGenerator(name="Emp_Gen", sequenceName = "Emp_Seq")
+	@GeneratedValue(generator="Emp_Gen")
 	@Column(name="EMPLOYEE_ID")
 	private Long id;
 	
