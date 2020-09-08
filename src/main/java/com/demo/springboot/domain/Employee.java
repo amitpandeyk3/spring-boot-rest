@@ -2,11 +2,13 @@ package com.demo.springboot.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(name="EMP")
@@ -22,7 +24,7 @@ public class Employee  {
 	@Column(name="EMPLOYEE_NAME")
 	private String name;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="DEPARTMENT_ID")
 	private Department department;
 
@@ -84,5 +86,34 @@ public class Employee  {
 
 	public void setVersion(Integer version) {
 		this.version = version;
+	}
+
+	@Override
+	public boolean equals(Object object){
+		if(this == object){
+			return true;
+		}
+		if(object == null){
+			return false;
+		}
+		if(getClass() != object.getClass()){
+			return false;
+		}
+
+		Employee department = (Employee) object;
+		return id!=null && id.equals(department.id);
+	}
+
+	@Override
+	public int hashCode(){
+		return Objects.hashCode(this.id);
+	}
+
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this).
+				append("id", id).
+				append("name", name).
+				toString();
 	}
 }

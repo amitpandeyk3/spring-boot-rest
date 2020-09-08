@@ -59,6 +59,12 @@ public class DepartmentController {
 
 	
 	@GetMapping("/departments/{id}")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Successfully retrieved list"),
+			@ApiResponse(code = 401, message = "You are not authorized to view the resource"),
+			@ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
+			@ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
+	})
 	public ResponseEntity<Resource<Department>> findDepartment(@PathVariable Long id){
 		this.validate(id);
 		Optional<Department> result = departmentService.findById(id);
@@ -70,7 +76,10 @@ public class DepartmentController {
 	}
 	
 	@ApiOperation(value="Create a new department")
-	@ApiResponse(code= 201, message="successfully created department")
+	@ApiResponses(value = {
+			@ApiResponse(code = 201, message = "successfully created department"),
+			@ApiResponse(code = 400, message = "Bad request")
+	})
 	@PostMapping(value="/departments", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> createDepartment(@Valid @RequestBody Department department){
 		 department = departmentService.save(department);
@@ -79,21 +88,36 @@ public class DepartmentController {
 		 responseHeaders.setLocation(uri);
 		 return new ResponseEntity<>(null, responseHeaders, HttpStatus.CREATED);
 	}
-	
+
+	@ApiOperation(value="Update a department")
+	@ApiResponses(value = {
+			@ApiResponse(code = 204, message = "Successfully updated department"),
+			@ApiResponse(code = 400, message = "Bad request")
+	})
 	@PutMapping("/departments/{id}")
 	public ResponseEntity<Void> updateDepartment(@Valid @RequestBody Department department){
 		validate(department.getId());
 		departmentService.save(department);
 		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	}
-	
+
+	@ApiOperation(value="Partially update a department")
+	@ApiResponses(value = {
+			@ApiResponse(code = 204, message = "Successfully updated department"),
+			@ApiResponse(code = 400, message = "Bad request")
+	})
 	@PatchMapping("/departments/{id}")
 	public ResponseEntity<Void> patchDepartment(@RequestBody Department department){
 		validate(department.getId());
 		departmentService.save(department);
 		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	}
-	
+
+	@ApiOperation(value="Delete a department")
+	@ApiResponses(value = {
+			@ApiResponse(code = 204, message = "Successfully deleted department"),
+			@ApiResponse(code = 404, message = "Department not found")
+	})
 	@DeleteMapping("/departments/{id}")
 	public ResponseEntity<Void> deleteDepartment(@PathVariable Long id){
 		validate(id);
